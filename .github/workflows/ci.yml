@@ -1,8 +1,8 @@
 name: Node.js CI!
 
-on: 
+on:
   push:
-  workflow_dispatch: 
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize]
 
@@ -11,19 +11,24 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      # 1. Спочатку обов'язково клонуємо репозиторій!
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Далі встановлюємо Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
+      # 3. Завантажуємо залежності
       - name: Install dependencies
         run: npm ci
 
+      # 4. Перевірка/Збірка
       - name: Build project
         run: node --check index.js
 
+      # 5. Тести
       - name: Run unit tests
         run: node --test
